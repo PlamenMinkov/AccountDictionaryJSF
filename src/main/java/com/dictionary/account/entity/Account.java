@@ -106,18 +106,23 @@ public class Account  implements java.io.Serializable
 		return address;
 	}
 	
-    public void saveAccount() 
+	// Method To Add New Student Details In Database
+    public void saveAccountRecord() 
     {
+        //System.out.println(this.address.getCountry());
         dbObj = new DatabaseOperations();
         dbObj.addStudentInDb(this);
     }
-
-	public void deleteAccount() 
+ 
+    // Method To Delete A Particular Student Record From The Database
+	public void deleteAccountRecord() 
 	{
+		System.out.println("Calling deleteStudentRecord() Method To Delete Student Record");
 		dbObj = new DatabaseOperations();
 		dbObj.deleteAccountInDb(accountId);
 	}
 
+	// Method To Fetch Particular Student Details From The Database
 	public Account getAccountDetailsById() 
 	{
 		dbObj = new DatabaseOperations();
@@ -125,8 +130,10 @@ public class Account  implements java.io.Serializable
 		return dbObj.getAccountById(accountId);
 	}
 
+	// Method To Update Particular Student Details In Database
 	public void updateAccountDetails() 
 	{
+		System.out.println("Calling updateStudentDetails() Method To Update Student Record");
 		dbObj = new DatabaseOperations();
 		dbObj.updateAccountRecord(this);
 	}

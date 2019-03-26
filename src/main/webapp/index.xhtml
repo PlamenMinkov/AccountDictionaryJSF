@@ -7,35 +7,33 @@
     <title>JSF Hibernate</title>
 </h:head>
 <h:body>
-    <center><h2>JSF Hibernate Crud Example</h2></center>
+    <center><h2>JSF CRUD</h2></center>
     <!-- New Student Form -->
     <h3 class="marginLeft12">1. New Account Form</h3>
     <h:form id="studentSaveForm" styleClass="form-horizontal">
         <h:panelGrid columns="4">
-        	<div>   
-	            <div class="form-group">
-	                <h:outputLabel value="Username:" styleClass="control-label" />
-	                <div class="col-xs-10">
-	                    <h:inputText value="#{account.username}" styleClass="form-control" />
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <h:outputLabel value="E-mail:" styleClass="control-label" />
-	                <div class="col-xs-10">
-	                    <h:inputText value="#{account.email}" styleClass="form-control" />
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <h:outputLabel value="Password:" styleClass="control-label" />
-	                <div class="col-xs-10">
-	                    <h:inputText value="#{account.password}" styleClass="form-control" />
-	                </div>
-	            </div>
-	            <div class="form-group">
-	                <div class="col-xs-offset-2 col-xs-10">
-	                    <h:commandButton value="Save Record" action="#{account.saveAccount}" styleClass="btn btn-primary btn-sm btnPos" />
-	                </div>
-	            </div>
+            <div class="form-group">
+                <h:outputLabel value="Username:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText value="#{account.username}" styleClass="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="E-mail:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText value="#{account.email}" styleClass="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Password:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText value="#{account.password}" styleClass="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                    <h:commandButton value="Save Record" action="#{account.saveAccountRecord}" styleClass="btn btn-primary btn-sm btnPos" />
+                </div>
             </div>
         </h:panelGrid>
     </h:form>
