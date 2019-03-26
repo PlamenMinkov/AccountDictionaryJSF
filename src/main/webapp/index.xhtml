@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <h:outputStylesheet library="css" name="jsf-hibernate.css"  />
+    <title>JSF Hibernate</title>
+</h:head>
+<h:body>
+    <center><h2>JSF Hibernate Crud Example</h2></center>
+    <!-- New Student Form -->
+    <h3 class="marginLeft12">1. New Account Form</h3>
+    <h:form id="studentSaveForm" styleClass="form-horizontal">
+        <h:panelGrid columns="4">
+        	<div>   
+	            <div class="form-group">
+	                <h:outputLabel value="Username:" styleClass="control-label" />
+	                <div class="col-xs-10">
+	                    <h:inputText value="#{account.username}" styleClass="form-control" />
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <h:outputLabel value="E-mail:" styleClass="control-label" />
+	                <div class="col-xs-10">
+	                    <h:inputText value="#{account.email}" styleClass="form-control" />
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <h:outputLabel value="Password:" styleClass="control-label" />
+	                <div class="col-xs-10">
+	                    <h:inputText value="#{account.password}" styleClass="form-control" />
+	                </div>
+	            </div>
+	            <div class="form-group">
+	                <div class="col-xs-offset-2 col-xs-10">
+	                    <h:commandButton value="Save Record" action="#{account.saveAccount}" styleClass="btn btn-primary btn-sm btnPos" />
+	                </div>
+	            </div>
+            </div>
+        </h:panelGrid>
+    </h:form>
+</h:body>
+</html>
