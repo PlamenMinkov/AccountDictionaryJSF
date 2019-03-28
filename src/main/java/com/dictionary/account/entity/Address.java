@@ -18,11 +18,14 @@ public class Address
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int addressId;
 	
+	@Column(name = "account_id")
+	private int accountId;
+	
 	@Column(name = "country")
-	public String country;
+	private String country;
 	
 	@Column(name = "town")
-	public String town;
+	private String town;
 	
 	@Column(name = "neighborhood")
 	private String neighborhood;
@@ -32,6 +35,19 @@ public class Address
 	
 	@Column(name = "number")
 	private int number;
+	
+	public Address()
+	{
+	}
+	
+	public Address(String country, String town, String neighborhood, String street, int number)
+	{
+		this.country = country;
+		this.town = town;
+		this.neighborhood = neighborhood;
+		this.street = street;
+		this.number =  number;
+	}
 	
 	public int getAddressId() 
 	{
@@ -91,5 +107,15 @@ public class Address
 	public void setNumber(int number) 
 	{
 		this.number = number;
+	}
+	
+	public int getAccountId() 
+	{
+		return accountId;
+	}
+
+	public void setAccountId(int accountId2) 
+	{
+		this.accountId = accountId2;
 	}
 }

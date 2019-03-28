@@ -3,6 +3,7 @@
 <h:head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <h:outputStylesheet library="css" name="jsf-hibernate.css"  />
     <title>JSF Hibernate</title>
 </h:head>
@@ -15,19 +16,49 @@
             <div class="form-group">
                 <h:outputLabel value="Username:" styleClass="control-label" />
                 <div class="col-xs-10">
-                    <h:inputText value="#{account.username}" styleClass="form-control" />
+                    <h:inputText value="#{account.username}" name="username" styleClass="form-control" />
                 </div>
             </div>
             <div class="form-group">
                 <h:outputLabel value="E-mail:" styleClass="control-label" />
                 <div class="col-xs-10">
-                    <h:inputText value="#{account.email}" styleClass="form-control" />
+                    <h:inputText value="#{account.email}" name="email" styleClass="form-control" />
                 </div>
             </div>
             <div class="form-group">
                 <h:outputLabel value="Password:" styleClass="control-label" />
                 <div class="col-xs-10">
-                    <h:inputText value="#{account.password}" styleClass="form-control" />
+                    <h:inputText value="#{account.password}" name="password" styleClass="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Country:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText id="country" styleClass="form-control" name="country"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Town:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText id="town" styleClass="form-control" name="town"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Neighborhood:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText id="neighborhood" styleClass="form-control" name="neighborhood"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Street:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText id="street" styleClass="form-control" name="street"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Street number:" styleClass="control-label" />
+                <div class="col-xs-10">
+                    <h:inputText id="number" styleClass="form-control" name="number"/>
                 </div>
             </div>
             <div class="form-group">
@@ -36,6 +67,7 @@
                 </div>
             </div>
         </h:panelGrid>
+        <h:outputText id="saveResult" rendered="#{not empty createdAccount}" value="!! #{createdAccount} !!" styleClass="successText" />
     </h:form>
 </h:body>
 </html>

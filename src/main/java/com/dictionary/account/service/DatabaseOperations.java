@@ -7,23 +7,22 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.dictionary.account.entity.Account;
+import com.dictionary.account.entity.Address;
 import com.dictionary.account.util.HibernateUtil;
 
 public class DatabaseOperations {
 
 	private static Transaction transObj;
 	private static Session sessionObj = HibernateUtil.getSessionFactory().openSession();
-
-	public void addStudentInDb(Account account) 
+	
+	public void addAddressInDb(Address address, int accountId) 
 	{
 		try 
 		{
+			address.setAccountId(accountId);
+			
 			transObj = sessionObj.beginTransaction();
-			sessionObj.save(account);
-			System.out.println("Account Record With username: " + account.getUsername() + " Is Successfully Created In Database");
-
-			// XHTML Response Text
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("createdAccount", account.getAccountId());
+			sessionObj.save(address);
 		} 
 		catch (Exception exceptionObj) 
 		{
@@ -33,6 +32,38 @@ public class DatabaseOperations {
 		{
 			transObj.commit();
 		}
+	}
+
+	public void addAccountInDb(Account account, Address address) 
+	{
+		String resultString = "";
+		
+		if(getAccountByUsername(account.getUsername()) == null)
+		{
+    		try 
+    		{
+				transObj = sessionObj.beginTransaction();
+				sessionObj.save(account);
+
+				resultString = "Account with username: " + account.getUsername() + "is created!";
+    		} 
+    		catch (Exception exceptionObj) 
+    		{
+    			exceptionObj.printStackTrace();
+    		} 
+    		finally 
+    		{
+    			transObj.commit();
+    		}
+    		
+    		addAddressInDb(address, getAccountByUsername(account.getUsername()).getAccountId());
+		}
+		else
+		{
+			resultString = "Username: " + account.getUsername() + " is used!";
+		}
+		
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("createdAccount", resultString);	
 	}
 
 	public void deleteAccountInDb(int delAccountId) 
@@ -72,6 +103,36 @@ public class DatabaseOperations {
 
 			// XHTML Response Text
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("findAccountById", accountId);
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+		
+		return accountObj;
+	}
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	public Account getAccountByUsername(String username) 
+	{
+		Account accountObj = null;
+		
+		try 
+		{
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("from Account where username= :username").setString("username", username);
+			
+			if(queryObj.list().size() > 0)
+			{
+				accountObj = (Account) queryObj.list().get(0);
+			}
+
+			// XHTML Response Text
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("findAccountByUsername", username);
 		} 
 		catch (Exception exceptionObj) 
 		{
