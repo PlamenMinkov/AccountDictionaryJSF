@@ -1,7 +1,7 @@
 package com.dictionary.account.entity;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import java.util.List;
+
 import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.dictionary.account.service.DatabaseOperations;
 
-@ManagedBean(name="account")
-@SessionScoped
 @Entity
 @Table(name = "account")
 public class Account  implements java.io.Serializable
@@ -44,17 +42,11 @@ public class Account  implements java.io.Serializable
     private static final long serialVersionUID = 1L;
     
     public Account() 
-    {
-    }
-    
-    public Account(int id) 
-    {
-        this.accountId = id;
+    {   	
     }
  
-    public Account(int id, String username, String email, String password) 
+    public Account(String username, String email, String password) 
     {
-        this.accountId = id;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -109,22 +101,6 @@ public class Account  implements java.io.Serializable
 	{
 		return address;
 	}
-	
-	// Method To Add New Student Details In Database
-    public void saveAccountRecord() 
-    {
-    	HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String country = request.getParameter("studentSaveForm:country");
-        String town = request.getParameter("studentSaveForm:town");
-        String neighborhood = request.getParameter("studentSaveForm:neighborhood");
-        String street = request.getParameter("studentSaveForm:street");
-        int number = Integer.parseInt(request.getParameter("studentSaveForm:number"));
-    	
-    	Address newAddress = new Address(country, town, street, neighborhood, number);
-        
-        dbObj = new DatabaseOperations();
-        dbObj.addAccountInDb(this, newAddress);
-    }
  
     // Method To Delete A Particular Student Record From The Database
 	public void deleteAccountRecord() 
@@ -145,7 +121,6 @@ public class Account  implements java.io.Serializable
 	// Method To Update Particular Student Details In Database
 	public void updateAccountDetails() 
 	{
-		System.out.println("Calling updateStudentDetails() Method To Update Student Record");
 		dbObj = new DatabaseOperations();
 		dbObj.updateAccountRecord(this);
 	}

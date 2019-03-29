@@ -1,6 +1,5 @@
 package com.dictionary.account.entity;
 
-import javax.faces.bean.ManagedBean;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@ManagedBean
 @Entity
 @Table(name = "account_role")
 public class AccountRole 
@@ -26,6 +24,17 @@ public class AccountRole
 	
 	@Column(name = "active")
 	private boolean active;
+	
+	public AccountRole() 
+	{
+	}
+	
+	public AccountRole(int accountId, int roleId, boolean active) 
+	{
+		this.accountId = accountId;
+		this.roleId = roleId;
+		this.active = active;
+	}
 
 	public int getId() 
 	{

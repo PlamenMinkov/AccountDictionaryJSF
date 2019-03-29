@@ -1,5 +1,10 @@
 package com.dictionary.account.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
+
 import javax.faces.context.FacesContext;
 
 import org.hibernate.Query;
@@ -7,13 +12,23 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.dictionary.account.entity.Account;
+import com.dictionary.account.entity.AccountRole;
 import com.dictionary.account.entity.Address;
+import com.dictionary.account.entity.Role;
 import com.dictionary.account.util.HibernateUtil;
 
 public class DatabaseOperations {
 
 	private static Transaction transObj;
-	private static Session sessionObj = HibernateUtil.getSessionFactory().openSession();
+	private static Session sessionObj;
+	
+	public DatabaseOperations() 
+	{
+		if(sessionObj == null)
+		{
+			sessionObj = HibernateUtil.getSessionFactory().openSession();
+		}	
+	}
 	
 	public void addAddressInDb(Address address, int accountId) 
 	{
@@ -33,8 +48,34 @@ public class DatabaseOperations {
 			transObj.commit();
 		}
 	}
+	
+	public void addAccountRoles(TreeSet<String> roles, int accountId) 
+	{	
+		for (Iterator<String> iterator = roles.iterator(); iterator.hasNext();) 
+		{
+			String roleId = (String) iterator.next();
+			if(roleId.length() > 0)
+			{
+				try 
+				{
+					System.out.println("accId" + accountId + " roleId: " + roleId);
+					AccountRole accountRole = new AccountRole(accountId, Integer.parseInt(roleId), true);
+					transObj = sessionObj.beginTransaction();
+					sessionObj.save(accountRole);
+				} 
+				catch (Exception exceptionObj) 
+				{
+					exceptionObj.printStackTrace();
+				} 
+				finally 
+				{
+					transObj.commit();
+				}
+			}		
+		}
+	}
 
-	public void addAccountInDb(Account account, Address address) 
+	public void addAccountInDb(Account account, Address address, TreeSet<String> roles) 
 	{
 		String resultString = "";
 		
@@ -56,7 +97,10 @@ public class DatabaseOperations {
     			transObj.commit();
     		}
     		
-    		addAddressInDb(address, getAccountByUsername(account.getUsername()).getAccountId());
+    		int accountId = getAccountByUsername(account.getUsername()).getAccountId();
+    		
+    		addAddressInDb(address, accountId);
+    		addAccountRoles(roles, accountId);
 		}
 		else
 		{
@@ -164,5 +208,59 @@ public class DatabaseOperations {
 		{
 			transObj.commit();
 		}
+	}
+	
+	public List<Account> getAllAccounts() 
+	{
+		List<Account> accountList = new ArrayList<Account>();
+		
+		try 
+		{
+			System.out.println(sessionObj);
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("from Account");
+			
+			for (int i = 0; i < queryObj.list().size(); i++) 
+			{
+				accountList.add((Account)queryObj.list().get(i));
+			}
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+		
+		return accountList;
+	}
+	
+	public List<Role> getAllRoles() 
+	{
+		List<Role> roletList = new ArrayList<Role>();
+		
+		try 
+		{
+			System.out.println(sessionObj);
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("from Role");
+			
+			for (int i = 0; i < queryObj.list().size(); i++) 
+			{
+				roletList.add((Role)queryObj.list().get(i));
+			}
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+		
+		return roletList;
 	}
 }
