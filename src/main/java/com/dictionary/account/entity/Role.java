@@ -1,5 +1,7 @@
 package com.dictionary.account.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +11,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "role")
-public class Role 
+public class Role implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2240924579991475395L;
+
 	@Id
 	@Column(name = "role_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +28,9 @@ public class Role
 	
 	@Column(name = "description")
 	private String description;
+	
+	@Column(name = "active")
+	private boolean active;
 	
 	public int getRoleId() 
 	{
@@ -51,4 +61,15 @@ public class Role
 	{
 		this.description = description;
 	}
+
+	public boolean isActive() 
+	{
+		return active;
+	}
+
+	public void setActive(boolean active) 
+	{
+		this.active = active;
+	}
+
 }

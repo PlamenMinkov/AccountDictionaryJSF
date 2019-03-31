@@ -7,7 +7,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <h:outputStylesheet library="css" name="jsf-hibernate.css"  />
-    <title>#{accountBean.name}</title>
+    <title>Create account</title>
 </h:head>
 <h:body>
     <center>
@@ -93,6 +93,10 @@ xmlns:ui="http://java.sun.com/jsf/facelets">
         {
        		$("#allRoles").val(value + "," + $(this).val());
         }
+        else 
+       	{
+        	$("#allRoles").val(value.replace("," + thisVal, ""));
+       	}
       });
     </script>
 </h:body>

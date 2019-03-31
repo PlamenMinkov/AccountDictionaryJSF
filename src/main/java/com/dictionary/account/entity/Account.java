@@ -2,23 +2,24 @@ package com.dictionary.account.entity;
 
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.servlet.http.HttpServletRequest;
 
 import com.dictionary.account.service.DatabaseOperations;
 
 @Entity
 @Table(name = "account")
-public class Account  implements java.io.Serializable
+public class Account  implements java.io.Serializable, Comparable<Account>
 {
 	@Id
 	@Column(name = "account_id")
@@ -34,9 +35,18 @@ public class Account  implements java.io.Serializable
 	@Column(name = "password")
 	private String password;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@Column(name = "active")
+	private boolean active;
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "account_id", referencedColumnName = "account_id")
 	private Address address;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "account_role", joinColumns =
+	{ @JoinColumn(name = "account_id", referencedColumnName = "account_id") }, inverseJoinColumns =
+	{ @JoinColumn(name = "role_id", referencedColumnName = "role_id") })
+	private List<Role> roles;
 	
 	public static DatabaseOperations dbObj;
     private static final long serialVersionUID = 1L;
@@ -50,6 +60,7 @@ public class Account  implements java.io.Serializable
         this.username = username;
         this.email = email;
         this.password = password;
+        this.active = true;
     }
 	
 	public int getAccountId() 
@@ -96,10 +107,31 @@ public class Account  implements java.io.Serializable
 	{
 		this.address = address;
 	}
-	
+
+	public boolean getActive() 
+	{
+		return active;
+	}
+
+	public void setActive(boolean active) 
+	{
+		this.active = active;
+	}
+
 	public Address getAddress() 
 	{
 		return address;
+	}
+	
+
+	public List<Role> getRoles() 
+	{
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) 
+	{
+		this.roles = roles;
 	}
  
     // Method To Delete A Particular Student Record From The Database
@@ -123,5 +155,11 @@ public class Account  implements java.io.Serializable
 	{
 		dbObj = new DatabaseOperations();
 		dbObj.updateAccountRecord(this);
+	}
+
+	@Override
+	public int compareTo(Account account) 
+	{
+		return this.getUsername().compareTo(account.getUsername());
 	}
 }

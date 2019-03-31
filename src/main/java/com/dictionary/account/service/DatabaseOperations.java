@@ -58,8 +58,7 @@ public class DatabaseOperations {
 			{
 				try 
 				{
-					System.out.println("accId" + accountId + " roleId: " + roleId);
-					AccountRole accountRole = new AccountRole(accountId, Integer.parseInt(roleId), true);
+					AccountRole accountRole = new AccountRole(accountId, Integer.parseInt(roleId));
 					transObj = sessionObj.beginTransaction();
 					sessionObj.save(accountRole);
 				} 
@@ -133,7 +132,6 @@ public class DatabaseOperations {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
 	public Account getAccountById(int accountId) 
 	{
 		Account accountObj = new Account();
@@ -141,12 +139,8 @@ public class DatabaseOperations {
 		try 
 		{
 			transObj = sessionObj.beginTransaction();
-			Query queryObj = sessionObj.createQuery("from Account where id= :account_id").setInteger("account_id", accountId);
+			Query queryObj = sessionObj.createQuery("from Account where accountId= :account_id").setInteger("account_id", accountId);
 			accountObj = (Account) queryObj.uniqueResult();
-			//particularStudentList = queryObj.list().get(0);
-
-			// XHTML Response Text
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("findAccountById", accountId);
 		} 
 		catch (Exception exceptionObj) 
 		{
@@ -160,7 +154,6 @@ public class DatabaseOperations {
 		return accountObj;
 	}
 	
-	@SuppressWarnings({ "unchecked", "unused" })
 	public Account getAccountByUsername(String username) 
 	{
 		Account accountObj = null;
@@ -198,7 +191,24 @@ public class DatabaseOperations {
 			sessionObj.update(account);
 
 			// XHTML Response Text
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("updatedAccount", "Success");
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("editAccount", "Success");
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+	}
+	
+	public void updateAddress(Address address) 
+	{
+		try 
+		{
+			transObj = sessionObj.beginTransaction();
+			sessionObj.update(address);
 		} 
 		catch (Exception exceptionObj) 
 		{
@@ -262,5 +272,65 @@ public class DatabaseOperations {
 		}
 		
 		return roletList;
+	}
+	
+	public Address getAccountAddressByAccountId(int accountId) 
+	{
+		Address address = new Address();
+		
+		try 
+		{
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("from Address where accountId= :account_id").setInteger("account_id", accountId);
+			address = (Address) queryObj.uniqueResult();
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+		
+		return address;
+	}
+	
+	public void changeAccountActiveState(Account account, boolean state)
+	{
+		try 
+		{
+			account.setActive(!state);
+			transObj = sessionObj.beginTransaction();
+			sessionObj.update(account);
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+	}
+	
+	public void deleteAccountRole(int accountId, int roleId)
+	{
+		try 
+		{
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("delete AccountRole where accountId= :account_id and roleId = :role_id");
+			queryObj.setParameter("account_id", accountId);
+			queryObj.setParameter("role_id", roleId);
+			int result = queryObj.executeUpdate();
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
 	}
 }

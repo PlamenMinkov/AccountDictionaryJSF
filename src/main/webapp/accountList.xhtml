@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta charset="utf-8" name="viewport"
+		content="width=device-width, initial-scale=1"
+		http-equiv="X-UA-Conpatible" />
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<h:outputStylesheet library="css" name="jsf-hibernate.css" />
+	<title>Accounts</title>
+
+	<style>
+		table {
+			font-family: arial, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		}
+		
+		td, th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+		
+		.filterIntup {
+			max-width:10%;
+		}
+	</style>
+</h:head>
+<h:body>
+	<center>
+		<h2>Accounts</h2>
+		
+		<h:form styleClass="form-horizontal">
+			<h:commandButton value="Show Active"
+							action="#{accountBean.sortByActiveState(true)}"
+							styleClass="btn btn-primary btn-sm btnPos" />
+			<h:commandButton value="Show Inactive"
+								action="#{accountBean.sortByActiveState(false)}"
+								styleClass="btn btn-primary btn-sm btnPos" />
+		</h:form>
+		<h:form id="filterForm" styleClass="form-horizontal">
+			<h:outputLabel value="Username:" styleClass="control-label" />
+			<h:inputText class="filterIntup" id="username" styleClass="form-control" name="username" />
+			
+			<h:outputLabel value="E-mail:" styleClass="control-label" />
+			<h:inputText class="filterIntup" id="email" styleClass="form-control" name="email" />
+			
+			<h:outputLabel value="Country:" styleClass="control-label" />
+			<h:inputText class="filterIntup" id="country" styleClass="form-control" name="country" />
+			
+			<h:outputLabel value="Town:" styleClass="control-label" />
+			<h:inputText class="filterIntup" id="town" styleClass="form-control" name="town" />
+			
+			<ui:repeat value="#{roleBean.allRoles}" var="role">
+				<input type="checkbox" class="filterRole" name="roles"
+					value="#{role.roleId}">#{role.name}</input>
+			</ui:repeat>
+			<br /> <input type="hidden" id="filterRoles" name="filterRoles" value=""></input>
+				
+			<h:commandButton value="Filter"
+								action="#{accountBean.filterByParams}"
+								styleClass="btn btn-primary btn-sm btnPos" />
+			<h:commandButton value="Clean Filter"
+								action="#{accountBean.cleanFilter}"
+								styleClass="btn btn-primary btn-sm btnPos" />
+		</h:form>
+		
+		<table id="account_list">
+			<tr>
+				<th></th>
+				<th>Username</th>
+				<th>E-mail</th>
+				<th>Country</th>
+				<th>Town</th>
+				<th>Street</th>
+				<th>Active</th>
+				<th>Roles</th>
+			</tr>
+			<ui:repeat value="#{accountBean.allAccounts}" var="account">
+				<tr>
+					<td>
+						<h:form styleClass="form-horizontal">
+							<h:commandButton value="Edit"
+											action="#{accountBean.setAccountForEdit(account)}"
+											styleClass="btn btn-primary btn-sm btnPos" />
+						</h:form>
+					</td>					
+					<td>#{account.username}</td>
+					<td>#{account.email}</td>
+					<td>#{account.address.country}</td>
+					<td>#{account.address.town}</td>
+					<td>#{account.address.neighborhood} #{account.address.number}</td>
+					<td>
+						<h:form styleClass="form-horizontal">
+							<h:commandButton value="Change"
+											action="#{accountBean.changeActiveState(account)}"
+											styleClass="btn btn-primary btn-sm btnPos" />
+						</h:form>
+						#{account.active}</td>
+					<td>
+						<ui:repeat value="#{account.roles}" var="role">
+							<h:form styleClass="form-horizontal">
+								<h:commandButton value="Change"
+												action="#{accountBean.deleteAccountRole(account.accountId, role.roleId)}"
+												styleClass="btn btn-primary btn-sm btnPos" />
+							</h:form>
+							#{role.name} 
+						</ui:repeat>
+					</td>					
+				</tr>
+			</ui:repeat>
+		</table>
+	</center>
+
+
+	<center>
+		<h2>Edit Account</h2>
+
+		<h:form id="studentSaveForm" styleClass="form-horizontal">
+			<h:panelGrid columns="4">
+				<div class="form-group">
+					<h:outputLabel value="E-mail:" styleClass="control-label" />
+					<div class="col-xs-10">
+						<h:inputText value="#{accountBean.accountForEdit.email}" id="email" name="email" styleClass="form-control" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel value="Country:" styleClass="control-label" />
+					<div class="col-xs-10">
+						<h:inputText value="#{accountBean.accountForEdit.address.country}" id="country" styleClass="form-control" name="country" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel value="Town:" styleClass="control-label" />
+					<div class="col-xs-10">
+						<h:inputText value="#{accountBean.accountForEdit.address.town}" id="town" styleClass="form-control" name="town" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel value="Neighborhood:" styleClass="control-label" />
+					<div class="col-xs-10">
+						<h:inputText value="#{accountBean.accountForEdit.address.neighborhood}" id="neighborhood" styleClass="form-control"
+							name="neighborhood" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel value="Street:" styleClass="control-label" />
+					<div class="col-xs-10">
+						<h:inputText value="#{accountBean.accountForEdit.address.street}" id="street" styleClass="form-control" name="street" />
+					</div>
+				</div>
+				<div class="form-group">
+					<h:outputLabel value="Street number:" styleClass="control-label" />
+					<div class="col-xs-10">
+						<h:inputText value="#{accountBean.accountForEdit.address.number}" id="number" styleClass="form-control" name="number" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-offset-2 col-xs-10">
+						<h:commandButton value="Edit Record"
+							action="#{accountBean.editAccount(accountBean.accountForEdit.username)}"
+							styleClass="btn btn-primary btn-sm btnPos" />
+					</div>
+				</div>
+
+				<h:outputText id="saveResult" rendered="#{not empty editAccount}"
+					value="!! #{editAccount} !!" styleClass="successText" />
+			</h:panelGrid>
+		</h:form>
+	</center>
+	<script>
+		$('.filterRole').click(function() {
+			var value = $("#filterRoles").val();
+			var thisVal = $(this).val();
+
+			if ($(this).is(':checked')) {
+				$("#filterRoles").val(value + "," + $(this).val());
+			}
+			else 
+	       	{
+	        	$("#filterRoles").val(value.replace("," + thisVal, ""));
+	       	}
+			console.log($("#filterRoles").val());
+		});
+	</script>
+</h:body>
+</html>
