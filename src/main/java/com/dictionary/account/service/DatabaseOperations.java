@@ -49,6 +49,36 @@ public class DatabaseOperations {
 		}
 	}
 	
+	public void addRole(Role role) 
+	{	
+		String resultString = "";
+		
+		if(getRoleByName(role.getName()) == null)
+		{
+			try 
+			{
+				transObj = sessionObj.beginTransaction();
+				sessionObj.save(role);
+				
+				resultString = "Role with name: " + role.getName() + " is created!";
+			} 
+			catch (Exception exceptionObj) 
+			{
+				exceptionObj.printStackTrace();
+			} 
+			finally 
+			{
+				transObj.commit();
+			}
+		}
+		else
+		{
+			resultString = "Role name: " + role.getName() + " is used!";
+		}
+		
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("createdRole", resultString);
+	}
+	
 	public void addAccountRoles(TreeSet<String> roles, int accountId) 
 	{	
 		for (Iterator<String> iterator = roles.iterator(); iterator.hasNext();) 
@@ -73,6 +103,50 @@ public class DatabaseOperations {
 			}		
 		}
 	}
+	
+	public void addAccountRole(int roleId, int accountId) 
+	{
+		AccountRole accountRole = null;
+		
+		try 
+		{
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("from AccountRole where accountId= :account_id and roleId=:role_id")
+								.setInteger("account_id", accountId)
+								.setInteger("role_id", roleId);
+			
+			if(queryObj.list().size() > 0)
+			{
+				accountRole = (AccountRole) queryObj.list().get(0);
+			}
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+		
+		if(accountRole == null)
+		{
+			try 
+			{
+				accountRole = new AccountRole(accountId, roleId);
+				transObj = sessionObj.beginTransaction();
+				sessionObj.save(accountRole);
+			} 
+			catch (Exception exceptionObj) 
+			{
+				exceptionObj.printStackTrace();
+			} 
+			finally 
+			{
+				transObj.commit();
+			}
+		}
+	}
 
 	public void addAccountInDb(Account account, Address address, TreeSet<String> roles) 
 	{
@@ -85,7 +159,7 @@ public class DatabaseOperations {
 				transObj = sessionObj.beginTransaction();
 				sessionObj.save(account);
 
-				resultString = "Account with username: " + account.getUsername() + "is created!";
+				resultString = "Account with username: " + account.getUsername() + " is created!";
     		} 
     		catch (Exception exceptionObj) 
     		{
@@ -181,6 +255,32 @@ public class DatabaseOperations {
 		}
 		
 		return accountObj;
+	}
+	
+	public Role getRoleByName(String name) 
+	{
+		Role role = null;
+		
+		try 
+		{
+			transObj = sessionObj.beginTransaction();
+			Query queryObj = sessionObj.createQuery("from Role where name= :name").setString("name", name);
+			
+			if(queryObj.list().size() > 0)
+			{
+				role = (Role) queryObj.list().get(0);
+			}
+		} 
+		catch (Exception exceptionObj) 
+		{
+			exceptionObj.printStackTrace();
+		} 
+		finally 
+		{
+			transObj.commit();
+		}
+		
+		return role;
 	}
 
 	public void updateAccountRecord(Account account) 

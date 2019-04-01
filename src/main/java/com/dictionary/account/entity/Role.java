@@ -32,6 +32,17 @@ public class Role implements Serializable
 	@Column(name = "active")
 	private boolean active;
 	
+	public Role() 
+	{
+	}
+	
+	public Role(String name, String description) 
+	{
+		this.name = name;
+		this.description = description;
+		this.active = true;
+	}
+	
 	public int getRoleId() 
 	{
 		return roleId;

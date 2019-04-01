@@ -133,29 +133,6 @@ public class Account  implements java.io.Serializable, Comparable<Account>
 	{
 		this.roles = roles;
 	}
- 
-    // Method To Delete A Particular Student Record From The Database
-	public void deleteAccountRecord() 
-	{
-		System.out.println("Calling deleteStudentRecord() Method To Delete Student Record");
-		dbObj = new DatabaseOperations();
-		dbObj.deleteAccountInDb(accountId);
-	}
-
-	// Method To Fetch Particular Student Details From The Database
-	public Account getAccountDetailsById() 
-	{
-		dbObj = new DatabaseOperations();
-		
-		return dbObj.getAccountById(accountId);
-	}
-
-	// Method To Update Particular Student Details In Database
-	public void updateAccountDetails() 
-	{
-		dbObj = new DatabaseOperations();
-		dbObj.updateAccountRecord(this);
-	}
 
 	@Override
 	public int compareTo(Account account) 

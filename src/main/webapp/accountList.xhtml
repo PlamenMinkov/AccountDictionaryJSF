@@ -38,6 +38,11 @@
 </h:head>
 <h:body>
 	<center>
+		<button><a href="#{request.contextPath}/index.xhtml">Create Account</a></button>
+		<button><a href="#{request.contextPath}/accountList.xhtml">Account Page</a></button>
+		<button><a href="#{request.contextPath}/rolePage.xhtml">Role Page</a></button>
+	</center>
+	<center>
 		<h2>Accounts</h2>
 		
 		<h:form styleClass="form-horizontal">
@@ -110,7 +115,7 @@
 					<td>
 						<ui:repeat value="#{account.roles}" var="role">
 							<h:form styleClass="form-horizontal">
-								<h:commandButton value="Change"
+								<h:commandButton value="Delete"
 												action="#{accountBean.deleteAccountRole(account.accountId, role.roleId)}"
 												styleClass="btn btn-primary btn-sm btnPos" />
 							</h:form>
